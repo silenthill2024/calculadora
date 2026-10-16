@@ -1,36 +1,23 @@
-name: Pruebas de la calculadora
+name: CI/CD Pipeline Python
 
 on:
   push:
-    branches:
-      - main
-
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
-
-  workflow_dispatch:
-
-permissions:
-  contents: read
+    branches: [ main ]
 
 jobs:
-  pruebas:
-    name: Ejecutar pruebas en Python
+  test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Descargar repositorio
-        uses: actions/checkout@v4
+      - name: Copiar repositorio
+        uses: actions/checkout@v3
 
-      - name: Configurar Python
-        uses: actions/setup-python@v5
+      - name: Configurar entorno Python
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.12' 
+          python-version: '3.10'
 
-      - name: Mostrar versión de Python
-        run: python --version
-
-
-      - name: Ejecutar pruebas unitarias
-        run: python -m unittest discover -s tests -v
+      - name: Ejecutar Pruebas Unitarias con Unittest
+        run: |
+          python -m unittest discover -s tests

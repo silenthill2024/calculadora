@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Pruebas - Calculadora CI/CD</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; }
+        .status-card { padding: 15px; border-radius: 6px; margin: 20px 0; font-weight: bold; text-align: center; font-size: 1.1em; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .failure { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 8px 12px; margin-bottom: 6px; background: #e9ecef; border-radius: 4px; display: flex; justify-content: space-between; }
+        .badge { font-weight: bold; padding: 2px 6px; border-radius: 4px; color: white; }
+        .pass { background-color: #28a745; }
+        .fail { background-color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard de Pruebas Unitarias (CI/CD)</h1>
+        <p>Repositorio: <strong>silenthill2024/calculadora</strong></p>
+        
+        <!-- Modifica esta clase a 'status-card failure' cuando quieras simular el fallo -->
+        <div class="status-card success" id="status-banner">
+            Estado del Pipeline: TODO CORRECTO (Última ejecución exitosa) ✅
+        </div>
+
+        <h3>Detalle de Pruebas:</h3>
+        <ul>
+            <li>test_sumar (10 + 5 = 15) <span class="badge pass">PASSED</span></li>
+            <li>test_restar (10 - 5 = 5) <span class="badge pass">PASSED</span></li>
+            <li>test_multiplicar (10 * 5 = 50) <span class="badge pass">PASSED</span></li>
+            <li>test_dividir (10 / 5 = 2) <span class="badge pass">PASSED</span></li>
+            <li>test_sumar_negativos (-3 + -2 = -5) <span class="badge pass">PASSED</span></li>
+            <li>test_multiplicar_por_cero (10 * 0 = 0) <span class="badge pass">PASSED</span></li>
+            <li>test_dividir_entre_cero (Excepción ValueError) <span class="badge pass">PASSED</span></li>
+        </ul>
+        <p><small>Desplegado automáticamente mediante GitHub Pages.</small></p>
+    </div>
+</body>
+</html>

@@ -7,7 +7,7 @@ from calculadora import sumar, restar, multiplicar, dividir
 class TestCalculadora(unittest.TestCase):
 
     def test_sumar(self):
-        self.assertEqual(sumar(10, 5), 15)
+        self.assertEqual(sumar(10, 5), 999)
 
     def test_restar(self):
         self.assertEqual(restar(10, 5), 5)
