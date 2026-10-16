@@ -28,6 +28,8 @@ jobs:
 
       - name: Subir artefacto (Archivos estáticos)
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'  # indica que use la raíz actual)
 
       - name: Desplegar en GitHub Pages
         id: deployment
