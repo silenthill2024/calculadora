@@ -1,0 +1,14 @@
+
+{
+  "name": "calculadora-cd",
+  "version": "1.0.0",
+  "description": "Calculadora web con pruebas y despliegue continuo en Railway",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node tests.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
