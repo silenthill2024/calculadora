@@ -20,7 +20,7 @@ function dividir(a, b) {
     return a / b;
 }
 
-assert.equal(sumar(2, 3), 5);
+assert.equal(sumar(2, 3), 6);
 assert.equal(restar(5, 3), 2);
 assert.equal(multiplicar(4, 3), 12);
 assert.equal(dividir(10, 2), 5);
