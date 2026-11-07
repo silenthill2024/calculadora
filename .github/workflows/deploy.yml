@@ -1,11 +1,10 @@
-#prueba con token activado
+
 name: Pipeline de liberacion y despliegue
 
 on:
   push:
     branches:
       - main
-
   pull_request:
     branches:
       - main
@@ -14,7 +13,6 @@ permissions:
   contents: read
 
 jobs:
-
   pruebas:
     name: Preparar y probar aplicacion
     runs-on: ubuntu-latest
@@ -34,19 +32,19 @@ jobs:
       - name: Preparar entorno de liberacion
         run: node scripts/prepare-release.js
 
+      - name: Verificar archivos de publicacion
+        run: |
+          ls -la dist
+          test -f dist/index.html
+
       - name: Ejecutar pruebas automatizadas
         run: node tests.js
 
   despliegue:
     name: Publicar en Cloudflare Pages
     needs: pruebas
-
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
 
     steps:
       - name: Descargar repositorio
@@ -60,7 +58,20 @@ jobs:
       - name: Preparar archivos de publicacion
         run: node scripts/prepare-release.js
 
+      - name: Comprobar carpeta dist
+        run: |
+          ls -la dist
+          test -f dist/index.html
+
+      - name: Comprobar acceso a Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages project list
+
       - name: Desplegar en Cloudflare Pages
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
