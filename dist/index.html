@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Pruebas - Calculadora CI/CD</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1, h3 { color: #2c3e50; text-align: center; }
+        .status-card { padding: 15px; border-radius: 6px; margin: 20px 0; font-weight: bold; text-align: center; font-size: 1.1em; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .failure { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 8px 12px; margin-bottom: 6px; background: #e9ecef; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+        .badge { font-weight: bold; padding: 2px 6px; border-radius: 4px; color: white; }
+        .pass { background-color: #28a745; }
+        .fail { background-color: #dc3545; }
+        
+        /* Estilos de la Calculadora Funcional */
+        .calculator-container {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #dee2e6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .calculator {
+            background-color: #2c3e50;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            width: 260px;
+        }
+        .calc-display {
+            width: 100%;
+            height: 50px;
+            background-color: #ecf0f1;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.5em;
+            text-align: right;
+            padding: 5px 10px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .calc-btn {
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: #34495e;
+            color: white;
+            transition: background 0.2s;
+        }
+        .calc-btn:hover { background-color: #4e6d8c; }
+        .calc-btn.op { background-color: #e67e22; }
+        .calc-btn.op:hover { background-color: #d35400; }
+        .calc-btn.equal { background-color: #27ae60; grid-column: span 2; }
+        .calc-btn.equal:hover { background-color: #219150; }
+        .calc-btn.clear { background-color: #e74c3c; grid-column: span 2; }
+        .calc-btn.clear:hover { background-color: #c0392b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mi calculadora web en Cloudflare Pages</h1>
+        <p style="text-align: center;">Repositorio: <strong>silenthill2024/calculadora</strong></p>
+        
+        <!-- Modifica esta clase a 'status-card failure' cuando quieras simular el fallo -->
+        <div class="status-card success" id="status-banner">
+            Estado del Pipeline: Exitoso ✔
+        </div>
+
+        <h3>Detalle de Pruebas:</h3>
+        <ul>
+            <li>test_sumar (10 + 5 = 15) <span class="badge pass">PASSED</span></li>
+            <li>test_restar (10 - 5 = 5) <span class="badge pass">PASSED</span></li>
+            <li>test_multiplicar (10 * 5 = 50) <span class="badge pass">PASSED</span></li>
+            <li>test_dividir (10 / 5 = 2) <span class="badge pass">PASSED</span></li>
+            <li>test_sumar_negativos (-3 + -2 = -5) <span class="badge pass">PASSED</span></li>
+            <li>test_multiplicar_por_cero (10 * 0 = 0) <span class="badge pass">PASSED</span></li>
+            <li>test_dividir_entre_cero (Excepción ValueError) <span class="badge pass">PASSED</span></li>
+        </ul>
+
+        <!-- Sección de la Calculadora -->
+        <div class="calculator-container">
+            <h3>Calculadora Interactiva</h3>
+            <div class="calculator">
+                <input type="text" id="display" class="calc-display" readonly value="0">
+                <div class="calc-buttons">
+                    <button class="calc-btn clear" onclick="clearDisplay()">C</button>
+                    <button class="calc-btn op" onclick="appendValue('/')">/</button>
+                    <button class="calc-btn op" onclick="appendValue('*')">*</button>
+
+                    <button class="calc-btn" onclick="appendValue('7')">7</button>
+                    <button class="calc-btn" onclick="appendValue('8')">8</button>
+                    <button class="calc-btn" onclick="appendValue('9')">9</button>
+                    <button class="calc-btn op" onclick="appendValue('-')">-</button>
+
+                    <button class="calc-btn" onclick="appendValue('4')">4</button>
+                    <button class="calc-btn" onclick="appendValue('5')">5</button>
+                    <button class="calc-btn" onclick="appendValue('6')">6</button>
+                    <button class="calc-btn op" onclick="appendValue('+')">+</button>
+
+                    <button class="calc-btn" onclick="appendValue('1')">1</button>
+                    <button class="calc-btn" onclick="appendValue('2')">2</button>
+                    <button class="calc-btn" onclick="appendValue('3')">3</button>
+                    <button class="calc-btn equal" onclick="calculate()">=</button>
+
+                    <button class="calc-btn" style="grid-column: span 2;" onclick="appendValue('0')">0</button>
+                    <button class="calc-btn" onclick="appendValue('.')">.</button>
+                </div>
+            </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 25px;"><small>Desplegado automáticamente mediante GitHub Pages.</small></p>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+
+        function appendValue(value) {
+            if (display.value === '0' || display.value === 'Error') {
+                display.value = value;
+            } else {
+                display.value += value;
+            }
+        }
+
+        function clearDisplay() {
+            display.value = '0';
+        }
+
+        function calculate() {
+            try {
+                // Manejo de división por cero explícito
+                if (display.value.includes('/0')) {
+                    const parts = display.value.split('/');
+                    if (parts[1] === '0' || parts[1].startsWith('0')) {
+                        display.value = 'Error';
+                        return;
+                    }
+                }
+                display.value = eval(display.value);
+            } catch (e) {
+                display.value = 'Error';
+            }
+        }
+    </script>
+</body>
+</html>

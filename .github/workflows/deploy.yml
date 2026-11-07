@@ -1,36 +1,67 @@
-name: Deploy GitHub Pages
+name: Pipeline de liberacion y despliegue
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+
+  pruebas:
+    name: Preparar y probar aplicacion
     runs-on: ubuntu-latest
+
     steps:
       - name: Descargar repositorio
         uses: actions/checkout@v4
 
-      - name: Configurar GitHub Pages
-        uses: actions/configure-pages@v4
-
-      - name: Subir artefacto (Archivos estáticos)
-        uses: actions/upload-pages-artifact@v3
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
         with:
-          path: '.'  # indica que use la raíz actual)
+          node-version: 20
 
-      - name: Desplegar en GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Verificar version de Node.js
+        run: node --version
+
+      - name: Preparar entorno de liberacion
+        run: node scripts/prepare-release.js
+
+      - name: Ejecutar pruebas automatizadas
+        run: node tests.js
+
+  despliegue:
+    name: Publicar en Cloudflare Pages
+    needs: pruebas
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Preparar archivos de publicacion
+        run: node scripts/prepare-release.js
+
+      - name: Desplegar en Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=calculadora-web --branch=main

@@ -5,7 +5,7 @@ from calculadora import sumar, restar, multiplicar, dividir
 
 
 class TestCalculadora(unittest.TestCase):
-
+    
     def test_sumar(self):
         self.assertEqual(sumar(3, 2), 5)
 

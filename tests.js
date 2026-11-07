@@ -1,29 +1,31 @@
+const assert = require("node:assert/strict");
 
-const assert = require('node:assert/strict');
+const {
+    sumar,
+    restar,
+    multiplicar,
+    dividir
+} = require("./operaciones.js");
 
-function sumar(a, b) {
-    return a + b;
-}
+console.log("Iniciando pruebas de la calculadora...");
 
-function restar(a, b) {
-    return a - b;
-}
+assert.equal(sumar(5, 3), 8);
+console.log("Correcto: suma");
 
-function multiplicar(a, b) {
-    return a * b;
-}
+assert.equal(restar(10, 4), 6);
+console.log("Correcto: resta");
 
-function dividir(a, b) {
-    if (b === 0) {
-        throw new Error('No se puede dividir entre cero');
-    }
-    return a / b;
-}
+assert.equal(multiplicar(5, 3), 15);
+console.log("Correcto: multiplicacion");
 
-assert.equal(sumar(3, 2), 5);
-assert.equal(restar(5, 3), 2);
-assert.equal(multiplicar(4, 3), 12);
-assert.equal(dividir(10, 2), 5);
-assert.throws(() => dividir(10, 0), /No se puede dividir entre cero/);
+assert.equal(dividir(12, 4), 3);
+console.log("Correcto: division");
 
-console.log('Todas las pruebas pasaron correctamente.');
+assert.throws(
+    () => dividir(8, 0),
+    /No se puede dividir entre cero/
+);
+
+console.log("Correcto: division entre cero");
+
+console.log("Todas las pruebas finalizaron correctamente.");
