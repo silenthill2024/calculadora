@@ -1,4 +1,3 @@
-```yaml
 name: Pipeline de liberacion y despliegue
 
 on:
