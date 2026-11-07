@@ -3,18 +3,20 @@
   "version": "1.0.0",
   "description": "Calculadora web con pruebas y despliegue continuo en Railway",
   "main": "server.js",
-"scripts": {
-  "start": "node server.js",
-  "test": "node tests.js",
-  "prepare:release": "node scripts/prepare-release.js"
-},
+  "scripts": {
+    "start": "node server.js",
+    "test": "node tests.js",
+    "prepare:release": "node scripts/prepare-release.js"
+  },
   "dependencies": {
     "express": "^5.1.0"
   },
   "directories": {
     "test": "tests"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "wrangler": "^4.158.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/silenthill2024/calculadora.git"
