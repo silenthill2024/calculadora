@@ -1,4 +1,4 @@
-
+```yaml
 name: Pipeline de liberacion y despliegue
 
 on:
@@ -13,6 +13,7 @@ permissions:
   contents: read
 
 jobs:
+
   pruebas:
     name: Preparar y probar aplicacion
     runs-on: ubuntu-latest
@@ -36,6 +37,7 @@ jobs:
         run: |
           ls -la dist
           test -f dist/index.html
+          test -f dist/operaciones.js
 
       - name: Ejecutar pruebas automatizadas
         run: node tests.js
@@ -62,16 +64,9 @@ jobs:
         run: |
           ls -la dist
           test -f dist/index.html
+          test -f dist/operaciones.js
 
-      - name: Comprobar acceso a Cloudflare
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages project list
-
-      - name: Desplegar en Cloudflare Pages
-        id: deploy
+      - name: Publicar en Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
