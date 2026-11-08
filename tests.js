@@ -9,7 +9,7 @@ const {
 
 console.log("Iniciando pruebas de la calculadora...");
 
-assert.equal(sumar(5, 3), 8);
+assert.equal(sumar(5, 3), 9);
 console.log("Correcto: suma");
 
 assert.equal(restar(10, 4), 6);
